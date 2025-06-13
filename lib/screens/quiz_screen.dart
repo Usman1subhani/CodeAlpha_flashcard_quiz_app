@@ -128,85 +128,102 @@ void checkAnswer(bool correct) {
 
     return Scaffold(
       appBar: AppBar(
-  title: Text('Flashcard Quiz'),
-  centerTitle: true,
-  backgroundColor: Colors.indigo,
-),
-
+        title: Text('Flashcard Quiz'),
+        centerTitle: true,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: Column(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Text('Question ${currentIndex + 1} of ${FlashcardData.flashcards.length}',
-        style: TextStyle(fontSize: 20)),
-
-    SizedBox(height: 30),
-
-   LinearProgressIndicator(
-  value: (currentIndex + 1) / FlashcardData.flashcards.length,
-  backgroundColor: Colors.grey[300],
-  color: Colors.indigo,
-),
-SizedBox(height: 16),
-
-
-    // 🃏 Flashcard UI
-    FlipCard(
-      key: cardKey,
-      flipOnTouch: false,
-      front: _buildCard(card.question, isQuestion: true),
-      back: _buildCard(card.answer, isQuestion: false),
-    ),
-
-    SizedBox(height: 30),
-
-    ElevatedButton(
-      onPressed: () => cardKey.currentState?.toggleCard(),
-      child: Text('Show Answer'),
-    ),
-
-    SizedBox(height: 20),
-
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          onPressed: () => checkAnswer(true),
-          child: Text('Correct'),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Question ${currentIndex + 1} of ${FlashcardData.flashcards.length}',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            SizedBox(height: 30),
+            LinearProgressIndicator(
+              value: (currentIndex + 1) / FlashcardData.flashcards.length,
+              backgroundColor: Colors.grey[300],
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            SizedBox(height: 16),
+            // 🃏 Flashcard UI
+            FlipCard(
+              key: cardKey,
+              flipOnTouch: false,
+              front: _buildCard(card.question, isQuestion: true),
+              back: _buildCard(card.answer, isQuestion: false),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () => cardKey.currentState?.toggleCard(),
+              child: Text('Show Answer'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 2,
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => checkAnswer(true),
+                  icon: Icon(Icons.check_circle_outline),
+                  label: Text('Correct'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.greenAccent.shade700,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () => checkAnswer(false),
+                  icon: Icon(Icons.cancel_outlined),
+                  label: Text('Wrong'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            // ✅ Live score display
+            Text(
+              'Score: $score',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () {
+                setState(() {
+                  currentIndex = 0;
+                  score = 0;
+                  cardKey = GlobalKey<FlipCardState>();
+                });
+              },
+              icon: Icon(Icons.restart_alt),
+              label: Text('Restart Quiz'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () => checkAnswer(false),
-          child: Text('Wrong'),
-        ),
-      ],
-    ),
-
-    SizedBox(height: 30),
-
-    // ✅ Live score display
-    Text(
-  'Score: $score',
-  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.indigo),
-),
-    SizedBox(height: 30),
-ElevatedButton.icon(
-  onPressed: () {
-    setState(() {
-      currentIndex = 0;
-      score = 0;
-      cardKey = GlobalKey<FlipCardState>();
-    });
-  },
-  icon: Icon(Icons.restart_alt),
-  label: Text('Restart Quiz'),
-  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-),
-
-
-  ],
-),
-
       ),
     );
   }
@@ -215,36 +232,34 @@ ElevatedButton.icon(
     return Container(
       height: 200,
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-  gradient: LinearGradient(
-    colors: isQuestion
-        ? [Colors.white, Colors.blue.shade50]
-        : [Colors.blue.shade50, Colors.indigo.shade100],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  ),
-  borderRadius: BorderRadius.circular(20),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.grey.withOpacity(0.3),
-      blurRadius: 12,
-      offset: Offset(0, 6),
-    ),
-  ],
-),
-
+        gradient: LinearGradient(
+          colors: isQuestion
+              ? [Colors.white, Colors.indigo.shade50]
+              : [Colors.indigo.shade50, Colors.indigo.shade200],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.18),
+            blurRadius: 16,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
       child: Center(
         child: Text(
-  text,
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontSize: 22,
-    fontWeight: FontWeight.bold,
-    color: isQuestion ? Colors.black87 : Colors.indigo.shade900,
-  ),
-)
-
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: isQuestion ? Colors.black87 : Colors.indigo.shade900,
+          ),
+        ),
       ),
     );
   }
