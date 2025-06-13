@@ -103,6 +103,8 @@ flashcard_quiz_app/
 5. Create a Pull Request.
 
 ## Screenshots
+![Untitled design](https://github.com/user-attachments/assets/2cfccf37-50ed-4287-9690-2d2298119d84)
+
 
 ## Contact
 Created by Usman Subhani.
