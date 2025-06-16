@@ -55,6 +55,7 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
               ),
               SizedBox(height: 16),
               TextField(
+                maxLines: 3,
                 controller: answerController,
                 decoration: InputDecoration(labelText: 'Answer'),
               ),

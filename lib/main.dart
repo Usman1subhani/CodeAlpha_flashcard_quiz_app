@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flashcard Quiz',
+      debugShowCheckedModeBanner: false,
+      title: 'Flashcard Quiz App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Color(0xFF6C63FF),
